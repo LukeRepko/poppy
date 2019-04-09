@@ -1,5 +1,5 @@
 oslosphinx
-sphinx
+sphinx<2.0.0
 sphinxcontrib-pecanwsme
 sphinxcontrib-httpdomain
 oslo.i18n>=2.1.0
