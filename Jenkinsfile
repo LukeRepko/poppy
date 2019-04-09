@@ -35,40 +35,26 @@ pipeline {
                 stage('PyLint') {
                     steps {
                         sh '''
-                        echo "Pylint tests are temporarily disabled"
-                        #. poppy_tests_venv/bin/activate
-                        # pycodestyle --max-line-length=119 --statistics --first
+                        . poppy_tests_venv/bin/activate
+                        pycodestyle --max-line-length=119 --statistics --first
                         '''
                     }
                 }
                 stage('Unit') {
                     steps {
                         sh '''
-                        echo "Unit tests are temporarily disabled"
-                        #. poppy_tests_venv/bin/activate
-                        #nosetests --with-coverage --cover-package=poppy --with-xunit --xunit-file=unit-tests.xml tests/unit
+                        . poppy_tests_venv/bin/activate
+                        nosetests --with-coverage --cover-package=poppy --with-xunit --xunit-file=unit-tests.xml tests/unit
                         '''
-                    }
-                    post {
-                        always {
-                            echo "junit 'unit-tests.xml' is currently disabled"
-                        }
                     }
                 }
                 stage('Functional') {
                     steps {
                         sh '''
-                        echo "Functional tests are temporarily disabled"
-                        #. poppy_tests_venv/bin/activate
-                        #nosetests --with-coverage --cover-package=poppy --with-xunit --xunit-file=functional-tests.xml tests/functional
+                        . poppy_tests_venv/bin/activate
+                        nosetests --with-coverage --cover-package=poppy --with-xunit --xunit-file=functional-tests.xml tests/functional
                         '''
                     }
-                    post {
-                        always {
-                            echo "junit 'functional-tests.xml' is currently disabled"
-                        }
-                    }
-
                 }
             }
         }
@@ -79,7 +65,7 @@ pipeline {
                 echo "Build and Upload PREVIEW Wheel for $BRANCH_NAME"
                 . poppy_venv/bin/activate
                 rm -rf dist
-                PBR_VERSION=2019.4.101 python setup.py bdist_wheel upload -v -r prev
+                PBR_VERSION=2019.4.102 python setup.py bdist_wheel upload -v -r prev
                 '''
             }
         }
