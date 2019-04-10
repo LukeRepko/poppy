@@ -777,9 +777,27 @@ class TestServices(base.TestCase):
                                            'protocol': 'https',
                                            'certificate': 'shared'}])
         controller = services.ServiceController(self.driver)
-        controller.ccu_api_client.post.return_value = mock.Mock(
-            status_code=201,
-            text='Post succesful'
+
+        controller.subcustomer_api_client.get.return_value = \
+            mock.Mock(status_code=200,
+                      ok=True,
+                      content=json.dumps({"geo": "US"}))
+
+        controller.subcustomer_api_client.delete.return_value = \
+            mock.Mock(status_code=200,
+                      ok=True)
+
+        controller.policy_api_client.get.return_value = mock.Mock(
+            status_code=200,
+            text=json.dumps(dict(rules=[]))
+        )
+        controller.policy_api_client.put.return_value = mock.Mock(
+            status_code=200,
+            text='Put successful'
+        )
+        controller.policy_api_client.delete.return_value = mock.Mock(
+            status_code=200,
+            text='Delete successful'
         )
         purge_url = '/img/abc.jpeg'
 
