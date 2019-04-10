@@ -17,29 +17,28 @@
 # THIS FILE IS MANAGED BY THE GLOBAL REQUIREMENTS REPO - DO NOT EDIT
 import os
 
-import pip
 import setuptools
 
-pip_session = pip.download.PipSession(retries=3)
 
 requirement_files = []
 # walk the requirements directory and gather requirement files
 for root, dirs, files in os.walk('requirements'):
     for requirements_file in files:
         requirements_file_path = os.path.join(root, requirements_file)
-        # parse_requirements() returns generator of requirement objects
-        requirement_files.append(
-            pip.req.parse_requirements(requirements_file_path,
-                                       session=pip_session))
+        requirement_files.append(requirements_file_path)
+
+if 'requirements/requirements.txt' in requirement_files:
+    requirement_files.remove('requirements/requirements.txt')
 
 # parse all requirement files and generate requirements
-requirements = set()
+requirements = []
 for requirement_file in requirement_files:
-    requirements.update([str(req.req) for req in requirement_file])
-# convert requirements in to list
-requirements = list(requirements)
+    with open(requirement_file, "r") as f:
+        for req in f.read().splitlines():
+            if len(req) > 0 and not req.startswith('#'):
+                requirements.append(req)
 
 setuptools.setup(
     install_requires=requirements,
-    setup_requires=['pbr==0.11.0'],
+    setup_requires=['pbr==0.11.0', 'testrepository'],
     pbr=True)
